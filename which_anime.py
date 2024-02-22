@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as soup
 import pandas as pd
+import json
+
 
 class Comparer:
     def __init__(self):
@@ -35,9 +37,20 @@ class Searcher:
     def __init__(self):
         self.base_url = "https://www.imdb.com/"
 
-    def search(self, title):
-        response = requests.get(self.base_url + "search/title/?genres=anime&title=" + title)
+    def search(self, title, year=None, tv=False, person=False):
+    
+        url = f"{self.base_url}search/anime/?name={name}" 
+
+        if year is not None:
+            url += f"&year={year}"
+        if tv:
+            url += "&type=tv"
+        if person:
+            url += "&type=person"
+        response = requests.get(url)
         page_soup = soup(response.text, 'html.parser')
+
+        
         watch_trailler_div = page_soup.find('a', class_='ipc-lockup-overlay ipc-focusable')
         rate = page_soup.find('div', class_ ='sc-e-7b78b2c-5 dWdOca')
         if watch_trailler_div is not None:
